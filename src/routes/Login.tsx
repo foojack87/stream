@@ -35,6 +35,7 @@ const Login = () => {
 
     // Perform validation before submission
     if (!isEmailValid) {
+      console.log('email error')
       setError('Invalid email format');
       setIsLoading(false);
       return;
@@ -45,17 +46,21 @@ const Login = () => {
       const userCredential = await signInUser(email, password)
 
       if (userCredential) {
+        setIsLoading(false);
         navigate('/formulaOne')
       }
     } catch (error:any) {
+      setIsLoading(false);
       console.log('User Sign In Failed', error.message);
+      setError('Invalid Email or Password')
+      setUserInfo({...userInfo, email: '', password: ''});
     }
   };
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen bg-gray-100">
+    <div className="flex flex-col items-center justify-center h-screen">
       <form
-        className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
+        className="bg-gray-300 shadow-md rounded px-8 pt-6 pb-8 mb-4"
         onSubmit={handleSubmit}
       >
         {error ? (
@@ -76,7 +81,7 @@ const Login = () => {
             }`}
             id="email"
             type="email"
-            placeholder="Enter your email"
+            placeholder="email@example.com"
             name="email"
             value={userInfo.email}
             onChange={handleChange}
@@ -94,7 +99,7 @@ const Login = () => {
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             id="password"
             type="password"
-            placeholder="Enter your password"
+            placeholder="Password"
             name="password"
             value={userInfo.password}
             onChange={handleChange}
